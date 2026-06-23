@@ -5,3 +5,11 @@ export type Mensaje = {
   direccion: "entrante" | "saliente";
   created_at: string;
 };
+
+export type Chat = {
+  id: number;
+  empresa_id: number;
+  empresa_nombre: string;
+  nombre: string;
+  telefono: string;
+};

@@ -12,7 +12,7 @@ app.get("/:chatId/mensajes", async (c) => {
     const chatId = Number(c.req.param("chatId"));
 
     if (isNaN(chatId)) {
-      return c.json({ status: "error", message: "chatId inválido" }, 400);
+      return c.json({ status: "error", message: "ID de chat invalido" }, 400);
     }
 
     const sql = createDb(c.env.DATABASE_URL);
@@ -27,7 +27,7 @@ app.get("/:chatId/mensajes", async (c) => {
 
     const mensajes = await sql`
       SELECT * FROM mensajes
-      WHERE chat_id = ${chatId}
+      WHERE chat_id = ${chatId} AND activo = true
       ORDER BY created_at ASC
     `;
 
@@ -53,14 +53,17 @@ app.post("/:chatId/mensajes", async (c) => {
 
     if (isNaN(chatId)) {
       return c.json(
-        { status: "error", message: "chatId inválido" },
+        { status: "error", message: "ID de chat invalido" },
         400
       );
     }
 
-    if (!contenido) {
+    if (
+      typeof contenido !== "string" ||
+      contenido.replace(/[\s\u200B-\u200D\uFEFF\u00AD\u3164]/g, "").length === 0
+    ) {
       return c.json(
-        { status: "error", message: "El contenido es requerido" },
+        { status: "error", message: "Content is required" },
         400
       );
     }
@@ -79,8 +82,8 @@ app.post("/:chatId/mensajes", async (c) => {
     }
 
     const nuevoMensaje = await sql`
-      INSERT INTO mensajes (chat_id, contenido, direccion)
-      VALUES (${chatId}, ${contenido}, 'saliente')
+      INSERT INTO mensajes (chat_id, contenido, direccion, activo)
+      VALUES (${chatId}, ${contenido}, 'saliente', true)
       RETURNING *
     `;
 
@@ -103,20 +106,21 @@ app.delete("/mensajes/:id", async (c) => {
 
     if (isNaN(id)) {
       return c.json(
-        { status: "error", message: "id inválido" },
+        { status: "error", message: "ID de mensaje invalido" },
         400
       );
     }
 
     const sql = createDb(c.env.DATABASE_URL);
 
-    const eliminado = await sql`
-      DELETE FROM mensajes
+    const actualizado = await sql`
+      UPDATE mensajes
+      SET activo = false
       WHERE id = ${id}
       RETURNING *
     `;
 
-    if (eliminado.length === 0) {
+    if (actualizado.length === 0) {
       return c.json(
         { status: "error", message: "Mensaje no encontrado" },
         404
@@ -125,7 +129,7 @@ app.delete("/mensajes/:id", async (c) => {
 
     return c.json({
       status: "success",
-      mensajes: eliminado
+      mensajes: actualizado
     });
 
   } catch (error) {
