@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import mensajes from "./routes/mensajes";
+import { cors } from "hono/cors";
+
 
 type Bindings = {
   DATABASE_URL: string;
@@ -12,5 +14,7 @@ app.get("/", (c) => {
 });
 
 app.route("/chats", mensajes);
+
+app.use("*", cors());
 
 export default app;
