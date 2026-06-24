@@ -1,0 +1,102 @@
+{
+  "info": {
+    "_postman_id": "12d5474d-2746-47aa-87d4-19988e35c910",
+    "name": "ChatsCollections",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56127416",
+    "_collection_link": "https://go.postman.co/collection/56127416-12d5474d-2746-47aa-87d4-19988e35c910?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Listar chats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8787/chats",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8787",
+          "path": [
+            "chats"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mensajes de chat x ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8787/chats/1/mensajes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8787",
+          "path": [
+            "chats",
+            "1",
+            "mensajes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear mensaje en x chat",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"contenido\": \"­­­­­­­­­­­­­­­­­­Este es un mensaje\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8787/chats/1/mensajes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8787",
+          "path": [
+            "chats",
+            "1",
+            "mensajes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar mensaje",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8787/chats/mensajes/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8787",
+          "path": [
+            "chats",
+            "mensajes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
